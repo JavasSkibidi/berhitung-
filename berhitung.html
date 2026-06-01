@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Hitung Seru! 🌟</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 5px solid #FFB6C1;
+        }
+
+        h1 {
+            color: #FF6B6B;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #FFE4E1;
+        }
+
+        .score-board {
+            font-size: 1.2rem;
+            color: #4D96FF;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 3.5rem;
+            margin: 20px 0;
+            color: #474747;
+            letter-spacing: 5px;
+        }
+
+        input[type="number"] {
+            font-size: 2rem;
+            width: 120px;
+            text-align: center;
+            border: 3px solid #6BCB77;
+            border-radius: 15px;
+            padding: 10px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #4D96FF;
+            box-shadow: 0 0 10px rgba(77, 150, 255, 0.5);
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 1.5rem;
+            background-color: #6BCB77;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 30px;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px #4d9c56;
+            transition: 0.1s;
+            width: 100%;
+        }
+
+        button:active {
+            box-shadow: 0 2px #4d9c56;
+            transform: translateY(3px);
+        }
+
+        .feedback {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            height: 40px;
+        }
+
+        .correct { color: #6BCB77; animation: bounce 0.5s; }
+        .wrong { color: #FF6B6B; animation: shake 0.5s; }
+
+        /* Animasi Lucu */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Yuk, Hitung! ✨</h1>
+    <div class="score-board">Skor Kamu: <span id="score">0</span> 🏆</div>
+    
+    <div class="question" id="question">5 + 3 = ?</div>
+    
+    <input type="number" id="answer" placeholder="?" min="0" max="20" autofocus>
+    <br>
+    <button onclick="checkAnswer()">Periksa! 👍</button>
+    
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+    let num1, num2, correctAnswer;
+    let score = 0;
+
+    // Fungsi untuk membuat soal baru secara acak
+    function generateQuestion() {
+        // Angka 1 sampai 10 agar tidak terlalu susah untuk anak-anak
+        num1 = Math.floor(Math.random() * 10) + 1;
+        num2 = Math.floor(Math.random() * 10) + 1;
+        correctAnswer = num1 + num2;
+
+        // Tampilkan soal di layar
+        document.getElementById('question').innerText = `${num1} + ${num2} = ?`;
+        // Kosongkan kotak jawaban
+        document.getElementById('answer').value = '';
+        // Fokuskan kembali ke kotak jawaban
+        document.getElementById('answer').focus();
+    }
+
+    // Fungsi untuk memeriksa jawaban anak
+    function checkAnswer() {
+        const userAnswer = parseInt(document.getElementById('answer').value);
+        const feedbackElement = document.getElementById('feedback');
+
+        // Validasi jika anak belum mengisi jawaban
+        if (isNaN(userAnswer)) {
+            feedbackElement.className = "feedback wrong";
+            feedbackElement.innerText = "Isi dulu jawabannya ya! 😉";
+            return;
+        }
+
+        if (userAnswer === correctAnswer) {
+            // Jika Benar
+            score += 10;
+            document.getElementById('score').innerText = score;
+            feedbackElement.className = "feedback correct";
+            feedbackElement.innerText = "Hebat! Benar! 🎉🥳";
+            
+            // Tunggu 1.5 detik, lalu ganti soal baru
+            setTimeout(generateQuestion, 1500);
+        } else {
+            // Jika Salah
+            feedbackElement.className = "feedback wrong";
+            feedbackElement.innerText = "Coba hitung lagi yuk! 💪😊";
+        }
+    }
+
+    // Biar bisa menjawab dengan menekan tombol 'Enter' di keyboard
+    document.getElementById('answer').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            checkAnswer();
+        }
+    });
+
+    // Jalankan soal pertama kali saat game dibuka
+    generateQuestion();
+</script>
+
+</body>
+</html>
+
